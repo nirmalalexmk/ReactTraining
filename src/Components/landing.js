@@ -38,6 +38,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import Footer from "./footer";
+import GridLayout from "./gridlayout";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -123,6 +124,11 @@ export default class Landing extends React.Component {
                       <Link style={{ color: "inherit" }} to="/assignment3_2">
                         <Fab variant="extended" style={{ borderRadius: 1 }}>
                           Assignment 3/4 : Part 2
+                        </Fab>
+                      </Link>
+                      <Link style={{ color: "inherit" }} to="/Layout">
+                        <Fab variant="extended" style={{ borderRadius: 1 }}>
+                          Layout
                         </Fab>
                       </Link>
                       &nbsp;
@@ -224,6 +230,15 @@ export default class Landing extends React.Component {
                       <>
                         <Heading value="Assignment 3/4: Part 2" />
                         <Apicall />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/Layout"
+                    element={
+                      <>
+                        <Heading value="Layout" />
+                        <GridLayout/>
                       </>
                     }
                   />
