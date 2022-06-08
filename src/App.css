@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+
+.assignement4div {
+  width: 100px;
+  height: 100px;
+}
+
+.mainDivs {
+  border-style: outset;
+  border-radius: 2%;
+}
+
+.fabStyle {
+  border-radius: 1%;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
+}
