@@ -38,7 +38,6 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import Footer from "./footer";
-import GridLayout from "./gridlayout";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -78,7 +77,7 @@ export default class Landing extends React.Component {
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <AppBar class="appBar" position="static">
                 <Toolbar>
-                  <Button color="inherit">
+                  <Button color="inherit" style={{ width: 150 }}>
                     <Link style={{ color: "inherit" }} to="/">
                       <span class="material-symbols-outlined">
                         <img src={imglogo} alt="" />
@@ -124,11 +123,6 @@ export default class Landing extends React.Component {
                       <Link style={{ color: "inherit" }} to="/assignment3_2">
                         <Fab variant="extended" style={{ borderRadius: 1 }}>
                           Assignment 3/4 : Part 2
-                        </Fab>
-                      </Link>
-                      <Link style={{ color: "inherit" }} to="/Layout">
-                        <Fab variant="extended" style={{ borderRadius: 1 }}>
-                          Layout
                         </Fab>
                       </Link>
                       &nbsp;
@@ -177,13 +171,9 @@ export default class Landing extends React.Component {
                     element={
                       <>
                         {/* <Heading value="Home" /> */}
-                        <Skeleton variant="text" width={600} height={30} />
+                        <Skeleton variant="text" xs={12} />
                         <Skeleton variant="circular" width={70} height={70} />
-                        <Skeleton
-                          variant="rectangular"
-                          width={600}
-                          height={400}
-                        />
+                        <Skeleton variant="rectangular" xs={12} height={400} />
                       </>
                     }
                   />
@@ -230,15 +220,6 @@ export default class Landing extends React.Component {
                       <>
                         <Heading value="Assignment 3/4: Part 2" />
                         <Apicall />
-                      </>
-                    }
-                  />
-                  <Route
-                    path="/Layout"
-                    element={
-                      <>
-                        <Heading value="Layout" />
-                        <GridLayout/>
                       </>
                     }
                   />

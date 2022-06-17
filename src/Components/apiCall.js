@@ -8,25 +8,52 @@ export default class Apicall extends React.Component {
   }
 
   Submit = () => {
-    fetch("https://reqres.in/api/login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-      }),
-    })
+    fetch(
+      "http://localhost:3001/login?emailid=" +
+        '"' +
+        this.state.email +
+        '"' +
+        "&password=" +
+        '"' +
+        this.state.password +
+        '"',
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => res.json())
       .then((resJson) => {
+        console.log(resJson);
         resJson.error
           ? this.setState({ loginMessage: resJson.error })
           : this.setState({
               loginMessage: "Login Successful | TokenID: " + resJson.token,
             });
       });
+
+    // fetch("https://reqres.in/api/login", {
+    //   method: "POST",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     email: this.state.email,
+    //     password: this.state.password,
+    //   }),
+    // })
+    //   .then((res) => res.json())
+    //   .then((resJson) => {
+    //     resJson.error
+    //       ? this.setState({ loginMessage: resJson.error })
+    //       : this.setState({
+    //           loginMessage: "Login Successful | TokenID: " + resJson.token,
+    //         });
+    //   });
   };
   emailChange = (e) => {
     this.setState({ email: e.target.value });

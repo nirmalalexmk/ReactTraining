@@ -3,6 +3,7 @@ import {
   Grid,
   Icon,
   IconButton,
+  Input,
   List,
   ListItemText,
   TextField,
@@ -23,12 +24,53 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default class Splice extends React.Component {
   componentDidMount() {
-    fetch("https://reqres.in/api/users?page=2")
+    var a = [
+      { first_name: "anand", last_name: "sukumaran" },
+
+      { first_name: "akshay", last_name: "G" },
+    ];
+
+    //console.log(a);
+    fetch("http://localhost:8000/user")
       .then((res) => res.json())
       .then((resJson) => {
-        console.log(resJson);
+        console.log(resJson.result.length);
+        if (resJson.result.length == 0) {
+          fetch("http://localhost:8000/user", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify([
+              {
+                first_name: "anand",
+                last_name: "sukumaran",
+              },
 
-        this.setState({ names: resJson.data });
+              {
+                first_name: "akash",
+                last_name: "g",
+              },
+              {
+                first_name: "ram",
+                last_name: "shankar",
+              },
+              {
+                first_name: "akhil",
+                last_name: "ravindran",
+              },
+            ]),
+          })
+            .then((res) => res.json())
+            .then((resJson) => {
+              console.log(resJson.result);
+              resJson.status == true
+                ? this.setState({ names: resJson.result })
+                : alert(resJson.message);
+            });
+        }
+        this.setState({ names: resJson.result });
       });
   }
   constructor(props) {
@@ -38,7 +80,10 @@ export default class Splice extends React.Component {
       names: [],
       first_name: "",
       last_name: "",
+      id: null,
       open: false,
+      txtfilter: "",
+      exist: false,
     };
   }
 
@@ -53,29 +98,64 @@ export default class Splice extends React.Component {
     });
   };
   pushData = () => {
-    var u = this.state.names;
-    u.push({
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-    });
-    this.setState({
-      names: u,
-    });
+    fetch("http://localhost:8000/user", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+      }),
+    })
+      .then((res) => res.json())
+      .then((resJson) => {
+        console.log(resJson.result);
+        resJson.status == true
+          ? this.setState({ names: resJson.result })
+          : alert(resJson.message);
+      });
+
+    // var u = this.state.names;
+    // u.push({
+    //   first_name: this.state.first_name,
+    //   last_name: this.state.last_name,
+    // });
+    // this.setState({
+    //   names: u,
+    // });
     this.handleClose();
   };
   splice = (e) => {
-    console.log(e.target.value);
-    var a = this.state.names;
-    a.splice(e.target.value, 1);
-    this.setState({ names: a });
+    var a = e.target;
+
+    fetch("http://localhost:8000/user", {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: e.target.value,
+      }),
+    })
+      .then((res) => res.json())
+      .then((resJson) => {
+        this.setState({ names: resJson.result });
+      });
+    // console.log(e.target.value);
+    // var a = this.state.names;
+    // a.splice(e.target.value, 1);
+    // this.setState({ names: a });
   };
   showNames = (name, index) => {
     return (
       <ListItem
-        key={index}
+        key={name.id}
         secondaryAction={
-          <IconButton edge="end" aria-label="delete">
-            <Icon value={index} onClick={this.splice}>
+          <IconButton value={name} edge="end" aria-label="delete">
+            <Icon value={name.id} onClick={this.splice}>
               delete
             </Icon>
           </IconButton>
@@ -113,6 +193,20 @@ export default class Splice extends React.Component {
 
   clearall = () => {
     this.setState({ names: [] });
+  };
+  filterName = (e) => {
+    this.setState({ txtfilter: e.target.value }, function () {
+      var somefunc = this.state.names.some(this.checksome);
+
+      this.setState({ exist: somefunc });
+    });
+  };
+  checksome = (name) => {
+    //console.log(name.first_name + "" + this.state.txtfilter);
+    return (
+      name.first_name === this.state.txtfilter ||
+      name.last_name === this.state.txtfilter
+    );
   };
 
   render() {
@@ -172,8 +266,15 @@ export default class Splice extends React.Component {
         <Button variant="outlined" onClick={this.clearall}>
           Clear all
         </Button>
+        <br />
+        <br />
 
-        <Grid container style={{ overflow: "scroll" }} lg={12} sm={12} xs={12}>
+        <TextField onChange={this.filterName} label="Filter by Name">
+          Filter by Name
+        </TextField>
+        <label>{this.state.exist == true ? "Name exist" : ""}</label>
+
+        <Grid container style={{ overflow: "scroll" }} lg={12} sm={9} xs={8}>
           <List style={{ width: 500, height: 350 }}>
             {this.state.names.map(this.showNames)}
           </List>
